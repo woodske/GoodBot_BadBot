@@ -113,10 +113,10 @@ function _voterBotMatch (bName, vName, vote, voter_id) {
             /**
              * Reply to voter. Send a link to the results page
              * */
-            // if (vName == "ozkazuo") {
-            //     console.log("Replying to " + vName);
-            //     r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName);
-            // }
+            console.log("Replying to " + vName);
+            r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
+            "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
+            
         } else {
             console.log(vName + " has already voted for " + bName);
         }
