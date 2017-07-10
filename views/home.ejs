@@ -1,0 +1,113 @@
+<head>
+    <meta charset="UTF-8">
+        <title>GoodBot_BatBot Rankings</title>
+    <link rel='stylesheet' href='/styles/stylesheet.css' type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<h1>Welcome to GoodBot_BadBot's Rankings</h1>
+
+<div class="container">
+    <div class="row>">
+        <div class="col-lg-12">
+            <h2>Good Bot Votes</h2>
+                <div>
+                    <canvas id="goodCountChart"></canvas>
+                </div>
+        </div>
+        <div class="col-lg-12">
+            <h2>Bad Bot Votes</h2>
+                <div>
+                    <canvas id="badCountChart"></canvas>
+                </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+
+<script>
+var ctx = document.getElementById("goodCountChart");
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["<%= botGoodName[0] %>", "<%= botGoodName[1] %>", "<%= botGoodName[2] %>", "<%= botGoodName[3] %>", "<%= botGoodName[4] %>", "<%= botGoodName[5] %>"],
+        datasets: [{
+            label: '# of Votes',
+            data: [<%= botGoodVote[0] %>, <%= botGoodVote[1] %>, <%= botGoodVote[2] %>, <%= botGoodVote[3] %>, <%= botGoodVote[4] %>, <%= botGoodVote[5] %>],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+<script>
+var ctx = document.getElementById("badCountChart");
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["<%= botBadName[0] %>", "<%= botBadName[1] %>", "<%= botBadName[2] %>", "<%= botBadName[3] %>", "<%= botBadName[4] %>", "<%= botBadName[5] %>"],
+        datasets: [{
+            label: '# of Votes',
+            data: [<%= botBadVote[0] %>, <%= botBadVote[1] %>, <%= botBadVote[2] %>, <%= botBadVote[3] %>, <%= botBadVote[4] %>, <%= botBadVote[5] %>],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
