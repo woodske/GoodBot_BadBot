@@ -21,49 +21,58 @@ const con = mysql.createConnection({
 /**
  * Every 2.15 seconds, call scrape() to search Reddit for new comments
  * */
-setInterval(function() {
-   script.scrape();
-}, 2150);
+// setInterval(function() {
+//   script.scrape();
+// }, 2150);
 
 /**
  * Homepage. Display the top 6 in most good bot votes and bad bot votes
  * */
 app.get('/', function (req, res) {
+    res.render('home.ejs');
+});
+
+app.get('/good_filter', function (req, res) {
+    var botNameArr = [];
+    var botVoteArr = [];
     
-    var botGoodNameArr = [];
-    var botGoodVoteArr = [];
-    var botBadNameArr = [];
-    var botBadVoteArr = [];
-  
     var sql = "SELECT botName, goodCount FROM bot ORDER BY goodCount DESC limit 6;";
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
         }
         result.forEach(function(key) {
-            botGoodNameArr.push(key.botName);
-            botGoodVoteArr.push(key.goodCount);
+            botNameArr.push(key.botName);
+            botVoteArr.push(key.goodCount);
         });
+        res.render('good_filter.ejs', 
+            {   
+                botName: botNameArr, 
+                botVote: botVoteArr
+            }
+        );  
     });
+});
+
+app.get('/bad_filter', function (req, res) {
+    var botNameArr = [];
+    var botVoteArr = [];
     
-    var sql = "SELECT botName, badCount FROM bot ORDER BY badCount DESC limit 6;";
+   var sql = "SELECT botName, badCount FROM bot ORDER BY badCount DESC limit 6;";
     con.query(sql, function(err, result) {
         if (err) {
              throw (err);
         }
         result.forEach(function(key) {
-            botBadNameArr.push(key.botName);
-            botBadVoteArr.push(key.badCount);
+            botNameArr.push(key.botName);
+            botVoteArr.push(key.badCount);
         });
-        res.render('home.ejs', 
+        res.render('bad_filter.ejs', 
             {   
-                botGoodName: botGoodNameArr, 
-                botGoodVote: botGoodVoteArr, 
-                botBadName: botBadNameArr, 
-                botBadVote: botBadVoteArr
-                
+                botName: botNameArr, 
+                botVote: botVoteArr
             }
-        );
+        );  
     });
 });
 
