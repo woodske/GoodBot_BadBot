@@ -108,14 +108,14 @@ function _voterBotMatch (bName, vName, vote, voter_id) {
          * */
         if (Object.keys(result).length == 0) {
             console.log(vName + " has not yet voted for " + bName);
-            _createMatch(bName, vName);
+            _createMatch(bName, vName, vote);
             _addVoteToBot(bName, vote);
             /**
              * Reply to voter. Send a link to the results page
              * */
-            console.log("Replying to " + vName);
-            r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
-            "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
+            // console.log("Replying to " + vName);
+            // r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
+            // "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
             
         } else {
             console.log(vName + " has already voted for " + bName);
@@ -129,12 +129,13 @@ function _voterBotMatch (bName, vName, vote, voter_id) {
 * @param {string} the voter's name
 * @returns No return value
 * */
-function _createMatch (bName, vName) {
+function _createMatch (bName, vName, vote) {
     /**
-     * Insert the bot ID and voter ID into the bot_voter table to prevent duplicate votes
+     * Insert the bot ID, voter ID, vote, and time/date into the bot_voter table to prevent duplicate votes
      * */
-    var sql = "INSERT INTO bot_voter (bot_id, voter_id) VALUES ((SELECT bot_id FROM bot WHERE botName = '" + bName + "'), " +
-        "(SELECT voter_id FROM voter WHERE voterName = '" + vName + "'));";
+    var date = new Date();
+   var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time) VALUES ((SELECT bot_id FROM bot WHERE botName = '" + bName + "'), " +
+        "(SELECT voter_id FROM voter WHERE voterName = '" + vName + "'), '" + vote + "', " + JSON.stringify(date) + ");";
     con.query(sql, function(err, result) {
         if (err) 
             throw (err);
