@@ -2,7 +2,7 @@
 <div class="container">
   
   <div class="navbar-header">
-    <a href="https://secure-dawn-77807.herokuapp.com/" class="navbar-brand">GoodBot_BadBot</a>
+    <a href="/" class="navbar-brand">GoodBot_BadBot</a>
   </div>
   
   <ul class="nav navbar-nav">
@@ -13,26 +13,18 @@
     <li class="dropdown">
       <a href="https://redditbot-woodske.c9users.io" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filters<span class="caret"></span></a>
       <ul class="dropdown-menu">
-        <li><a href="#">Top 10 Good Bots</a></li>
-        <li><a href="#">Top 10 Bad Bots</a></li>
-        <li><a href="#">Top 10 Controversial Bots</a></li>
-        <li><a href="#">All Bots</a></li>
+        <li><a href="/good_filter">Top 6 Good Bots</a></li>
+        <li><a href="/bad_filter">Top 6 Bad Bots</a></li>
+        <li><a href="/all_filter">All Bots</a></li>
       </ul>
     </li>
   </ul>
   
-  <form class="navbar-form navbar-right" role="search">
+  <form class="navbar-form navbar-right" role="search" action="/voter" method='POST'>
     <div class="form-group">
-      <input type="text" class="form-control" placeholder="Voter Name">
+      <input type="text" class="form-control" placeholder="Voter Name" name="voter">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
-  
-  <form class="navbar-form navbar-right" role="search">
-    <div class="form-group">
-      <input type="text" class="form-control" placeholder="Bot Name">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button class="btn btn-default">Submit</button>
   </form>
   
 </div>  
