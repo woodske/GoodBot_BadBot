@@ -1,3 +1,10 @@
-h1 {
+h1, h2 {
     text-align: center;
 }
+
+.info_div {
+    text-align: center;
+    font-size: 16;
+}
+
+
