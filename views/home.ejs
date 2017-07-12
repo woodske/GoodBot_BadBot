@@ -58,7 +58,27 @@
     </div>
   </div>
 </div>
+
 <br>
+<br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Worst Bot Standings</h2>
+      <div class="info_div">
+        These are the 6 worst bots with at least three votes sorted by the inverse of the 
+        <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">
+        Lower bound of Wilson score confidence interval for a Bernoulli parameter</a>.
+      </div>
+    </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <canvas id="worstChart"></canvas>
+    </div>
+  </div>
+</div>
+
 <br>
 <br>
 
@@ -80,10 +100,10 @@ var ctx = document.getElementById("bestChart");
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ["<%= botName[0] %>", "<%= botName[1] %>", "<%= botName[2] %>", "<%= botName[3] %>", "<%= botName[4] %>", "<%= botName[5] %>"],
+        labels: ["<%= bestBotName[0] %>", "<%= bestBotName[1] %>", "<%= bestBotName[2] %>", "<%= bestBotName[3] %>", "<%= bestBotName[4] %>", "<%= bestBotName[5] %>"],
         datasets: [{
             label: 'Lower Bound of Wilson Score Confidence Interval',
-            data: [<%= botScore[0] %>, <%= botScore[1] %>, <%= botScore[2] %>, <%= botScore[3] %>, <%= botScore[4] %>, <%= botScore[5] %>],
+            data: [<%= bestBotScore[0] %>, <%= bestBotScore[1] %>, <%= bestBotScore[2] %>, <%= bestBotScore[3] %>, <%= bestBotScore[4] %>, <%= bestBotScore[5] %>],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -114,4 +134,46 @@ var myChart = new Chart(ctx, {
     }
 });
 </script>
+
+<script>
+var ctx = document.getElementById("worstChart");
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["<%= worstBotName[0] %>", "<%= worstBotName[1] %>", "<%= worstBotName[2] %>", "<%= worstBotName[3] %>", "<%= worstBotName[4] %>", "<%= worstBotName[5] %>"],
+        datasets: [{
+            label: 'Inverse of the Lower Bound of Wilson Score Confidence Interval',
+            data: [<%= worstBotScore[0] %>, <%= worstBotScore[1] %>, <%= worstBotScore[2] %>, <%= worstBotScore[3] %>, <%= worstBotScore[4] %>, <%= worstBotScore[5] %>],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+
 
