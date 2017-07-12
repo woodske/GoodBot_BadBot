@@ -66,16 +66,19 @@ function _storeVote(commentObj, result) {
         var voterName = commentObj.author.name;
         console.log("The voter is " + voterName);
         /**
-         * Find the username of the parent comment. This is the bot's name.
+         * Dealy one second, then find the username of the parent comment. This is the bot's name.
          * */
-        r.getComment(commentObj.parent_id).fetch().then(function (obj) {
-            console.log("The bot is " + obj.author.name);
-            /**
-             * Send bot name, voter name, vote result, and parent ID to addToDb found in
-             * the db.js file. This handles the database interaction and commenting.
-             * */
-            db.addToDb(obj.author.name, voterName, result, commentObj.name);
-        });
+        setTimeout(function () {
+            r.getComment(commentObj.parent_id).fetch().then(function (obj) {
+                console.log("The bot is " + obj.author.name);
+                /**
+                 * Send bot name, voter name, vote result, and parent ID to addToDb found in
+                 * the db.js file. This handles the database interaction and commenting.
+                 * */
+                db.addToDb(obj.author.name, voterName, result, commentObj.name);
+            });
+        }, 1000);
+        
     } else {
         console.log(voterName + " did not respond to a comment");
     }

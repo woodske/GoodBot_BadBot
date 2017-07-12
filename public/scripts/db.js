@@ -111,12 +111,13 @@ function _voterBotMatch (bName, vName, vote, voter_id) {
             _createMatch(bName, vName, vote);
             _addVoteToBot(bName, vote);
             /**
-             * Reply to voter. Send a link to the results page
+             * Delay one second then reply to voter with a link to the results page.
              * */
-            console.log("Replying to " + vName);
-            r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
-            "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
-            
+            setTimeout(function () {
+                console.log("Replying to " + vName);
+                r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
+                "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
+            }, 1000);
         } else {
             console.log(vName + " has already voted for " + bName);
         }
