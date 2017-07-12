@@ -113,9 +113,9 @@ function _voterBotMatch (bName, vName, vote, voter_id) {
             /**
              * Reply to voter. Send a link to the results page
              * */
-            // console.log("Replying to " + vName);
-            // r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
-            // "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
+            console.log("Replying to " + vName);
+            r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
+            "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
             
         } else {
             console.log(vName + " has already voted for " + bName);
@@ -134,7 +134,7 @@ function _createMatch (bName, vName, vote) {
      * Insert the bot ID, voter ID, vote, and time/date into the bot_voter table to prevent duplicate votes
      * */
     var date = new Date();
-   var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time) VALUES ((SELECT bot_id FROM bot WHERE botName = '" + bName + "'), " +
+    var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time) VALUES ((SELECT bot_id FROM bot WHERE botName = '" + bName + "'), " +
         "(SELECT voter_id FROM voter WHERE voterName = '" + vName + "'), '" + vote + "', " + JSON.stringify(date) + ");";
     con.query(sql, function(err, result) {
         if (err) 
