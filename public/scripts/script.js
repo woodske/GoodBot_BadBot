@@ -35,14 +35,14 @@ module.exports = {
                  * If so, pass the comment object and vote to storeVote() to 
                  * handle the database insertions and commenting
                  * */
-                var comment = key.body.toLowerCase();
+                var comment = key.body.substring(0,8).toLowerCase();
                 
                 
-                if(comment == "good bot" || comment == "good bot!" || comment == "good bot.") {
+                if(comment == "good bot") {
                     console.log("Found comment '" + key.body + "'");
                     _storeVote(key, "good");
                 }
-                else if(comment == "bad bot" || comment == "bad bot!" || comment == "bad bot.") {
+                else if(comment == "bad bot") {
                     console.log("Found comment '" + key.body + "'");
                     _storeVote(key, "bad");
                 }
