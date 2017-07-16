@@ -89,6 +89,15 @@ function _addVoter (vName) {
 }
 
 /**
+* @summary Escapes underscores in usernames to prevent Reddit from italicising text
+* @param {string} the username
+* @return {string} the escaped username
+* */
+function _escapeUName (username) {
+    return (uname).replace(/_/g, "\\_");
+}
+
+/**
 * @summary Determines if the voter has voted on the bot before
 * @param {string} the bot's name
 * @param {string} the voter's name
@@ -115,7 +124,7 @@ function _voterBotMatch (bName, vName, vote, voter_id) {
              * */
             setTimeout(function () {
                 console.log("Replying to " + vName);
-                r.getSubmission(voter_id).reply("Thank you " + vName + " for voting on " + bName + ".  \n\n" +
+                r.getSubmission(voter_id).reply("Thank you " + _formatUName(vName) + " for voting on " + _formatUName(bName) + ".  \n\n" +
                 "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
             }, 1000);
         } else {
