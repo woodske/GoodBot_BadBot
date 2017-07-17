@@ -93,8 +93,8 @@ function _addVoter (vName) {
 * @param {string} the username
 * @return {string} the escaped username
 * */
-function _escapeUName (username) {
-    return (uname).replace(/_/g, "\\_");
+function _formatUName (username) {
+    return (username).replace(/_/g, "\\_");
 }
 
 /**
