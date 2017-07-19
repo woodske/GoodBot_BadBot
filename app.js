@@ -82,7 +82,7 @@ app.get('/', function (req, res) {
     var sql = "SELECT botName, 1/(((goodCount + 1.9208) / (goodCount + badCount) - " +
                 "1.96 * SQRT((goodCount * badCount) / (goodCount + badCount) + 0.9604) / " +
                 "(goodCount + badCount)) / (1 + 3.8416 / (goodCount + badCount))) " +
-                "AS ci_lower_bound FROM bot WHERE goodCount + badCount > 2 " +
+                "AS ci_lower_bound FROM bot WHERE goodCount + badCount > 9 " +
                 "ORDER BY ci_lower_bound DESC limit 6;";
 
     con.query(sql, function(err, result) {
