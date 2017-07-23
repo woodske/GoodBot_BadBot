@@ -1,0 +1,118 @@
+<head>
+  <meta charset="UTF-8">
+    <title>GoodBot_BadBot Rankings</title>
+  <link rel='stylesheet' href='/styles/stylesheet.css' type="text/css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+
+<!--Navigation bar to go here-->
+<div id="nav-placeholder">
+  
+</div>
+
+<!--Display current vote tally-->
+<div class = "container">
+  <h1>Welcome to GoodBot_BadBot's Rankings</h1>
+  <div class="info_div">There have been <strong><%= total %></strong> votes cast:
+  <strong><%= goodCount %></strong> good bot votes and <strong><%= badCount %></strong> bad bot votes.</div>
+</div>
+
+<br>
+<br>
+
+<!--Homepage content to go here-->
+<div id="homepage-placeholder">
+  
+  
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Worst Bot Standings</h2>
+      <div class="info_div">
+        These are the 6 worst bots with at least ten votes sorted by the inverse of the 
+        <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">
+        Lower bound of Wilson score confidence interval for a Bernoulli parameter</a>.
+      </div>
+    </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <canvas id="worstChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+
+</body>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+$.get("./html/nav.html", function(data){
+    $("#nav-placeholder").replaceWith(data);
+});
+
+$.get("./html/homepage.html", function(data) {
+    $("#homepage-placeholder").replaceWith(data);
+});
+</script>
+
+<script>
+var ctx = document.getElementById("worstChart");
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["<%= worstBotName[0] %>", "<%= worstBotName[1] %>", "<%= worstBotName[2] %>", "<%= worstBotName[3] %>", "<%= worstBotName[4] %>", "<%= worstBotName[5] %>"],
+        datasets: [{
+            label: 'Inverse of the Lower Bound of Wilson Score Confidence Interval',
+            data: [<%= worstBotScore[0] %>, <%= worstBotScore[1] %>, <%= worstBotScore[2] %>, <%= worstBotScore[3] %>, <%= worstBotScore[4] %>, <%= worstBotScore[5] %>],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+ctx.onclick = function (evt) {
+    var activePoints = myChart.getElementsAtEvent(evt);
+    var firstPoint = activePoints[0];
+    var username = myChart.data.labels[firstPoint._index];
+    if (firstPoint !== undefined)
+        window.open("https://reddit.com/u/"+username+"/", "_blank");
+};
+</script>
+
+
+
+
