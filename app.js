@@ -31,7 +31,7 @@ setInterval(function() {
 }, 2150);
 
 /**
- * Homepage. Display the top 6 best bots, top 6 worst bots, and current count of votes.
+ * Homepage. Display the current count of vote and best bot rank.
  * */
 app.get('/', function (req, res) {
     
@@ -40,9 +40,6 @@ app.get('/', function (req, res) {
     var badCount;               //Total number of bad bot votes
     var bestBotNameArr = [];    //Array of best bot names
     var bestBotScoreArr = [];   //Array of highest confidence interval scores
-    var worstBotNameArr = [];    //Array of worst bot names
-    var worstBotScoreArr = [];   //Array of lowest confidence interval scores
-    
     
     /**
      * Query for total number of votes
@@ -74,6 +71,42 @@ app.get('/', function (req, res) {
             bestBotNameArr.push(key.botName);
             bestBotScoreArr.push(key.ci_lower_bound);
         });
+    
+        res.render('home.ejs', 
+            {
+                total: total,
+                goodCount: goodCount,
+                badCount: badCount,
+                bestBotName: bestBotNameArr,
+                bestBotScore: bestBotScoreArr
+            }
+        );
+        
+    });
+});
+
+/**
+ * Homepage. Display the current count of vote and worst bot rank.
+ * */
+app.get('/worst_filter', function (req, res) {
+    
+    var total;                  //Total number of bot votes
+    var goodCount;              //Total number of good bot votes
+    var badCount;               //Total number of bad bot votes
+    var worstBotNameArr = [];    //Array of worst bot names
+    var worstBotScoreArr = [];   //Array of lowest confidence interval scores
+    
+    /**
+     * Query for total number of votes
+     * */
+    var sql = "SELECT SUM(goodCount), SUM(badCount), SUM(goodCount) + SUM(badCount) FROM bot;";
+    con.query(sql, function(err, result) {
+        if (err) {
+            throw (err);
+        }
+        total = result[0]['SUM(goodCount) + SUM(badCount)'];
+        goodCount = result[0]['SUM(goodCount)'];
+        badCount = result[0]['SUM(badCount)'];
     });
     
     /**
@@ -94,68 +127,16 @@ app.get('/', function (req, res) {
             worstBotScoreArr.push(key.ci_lower_bound);
         });
         
-        res.render('home.ejs', 
+        res.render('worst_filter.ejs', 
             {
                 total: total,
                 goodCount: goodCount,
                 badCount: badCount,
-                bestBotName: bestBotNameArr,
-                bestBotScore: bestBotScoreArr,
                 worstBotName: worstBotNameArr,
                 worstBotScore: worstBotScoreArr
             }
         );
         
-    });
-});
-
-app.get('/good_filter', function (req, res) {
-    var botNameArr = [];
-    var botVoteArr = [];
-    
-    /**
-     * Query for top 6 good bot votes
-     * */
-    var sql = "SELECT botName, goodCount FROM bot ORDER BY goodCount DESC limit 6;";
-    con.query(sql, function(err, result) {
-        if (err) {
-            throw (err);
-        }
-        result.forEach(function(key) {
-            botNameArr.push(key.botName);
-            botVoteArr.push(key.goodCount);
-        });
-        res.render('good_filter.ejs', 
-            {   
-                botName: botNameArr, 
-                botVote: botVoteArr
-            }
-        );  
-    });
-});
-
-app.get('/bad_filter', function (req, res) {
-    var botNameArr = [];
-    var botVoteArr = [];
-    
-    /**
-     * Query for top 6 bad bot votes
-     * */
-    var sql = "SELECT botName, badCount FROM bot ORDER BY badCount DESC limit 6;";
-    con.query(sql, function(err, result) {
-        if (err) {
-             throw (err);
-        }
-        result.forEach(function(key) {
-            botNameArr.push(key.botName);
-            botVoteArr.push(key.badCount);
-        });
-        res.render('bad_filter.ejs', 
-            {   
-                botName: botNameArr, 
-                botVote: botVoteArr
-            }
-        );  
     });
 });
 
