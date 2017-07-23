@@ -26,9 +26,9 @@ const con = mysql.createConnection({
 /**
  * Every 2.15 seconds, call scrape() to search Reddit for new comments
  * */
-// setInterval(function() {
-//   script.scrape();
-// }, 2150);
+setInterval(function() {
+  script.scrape();
+}, 2150);
 
 /**
  * Homepage. Display the current count of vote and best bot rank.
