@@ -26,9 +26,9 @@ const con = mysql.createConnection({
 /**
  * Every 2.15 seconds, call scrape() to search Reddit for new comments
  * */
-setInterval(function() {
-  script.scrape();
-}, 2150);
+// setInterval(function() {
+//   script.scrape();
+// }, 2150);
 
 /**
  * Homepage. Display the current count of vote and best bot rank.
@@ -174,7 +174,11 @@ app.post('/voter', function(req, res) {
      * */
     var sql = "SELECT botName FROM bot INNER JOIN bot_voter ON bot.bot_id = bot_voter.bot_id " +
         "INNER JOIN voter ON bot_voter.voter_id = voter.voter_id " +
-        "WHERE voter.voterName = '" + req.body.voter + "' ORDER BY botName;";
+        "WHERE voter.voterName = ? ORDER BY botName;";
+    
+    var inserts = [req.body.voter];
+    sql = mysql.format(sql, inserts);
+    
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
