@@ -24,7 +24,7 @@
         </tr>
         <% for(var i = 0; i < byGoodArr.length; i++) { %>
           <tr>
-            <td><%= byGoodArr[i]['botName'] %></td>
+            <td><a href='https://www.reddit.com/user/<%= byGoodArr[i]['botName'] %>'><%= byGoodArr[i]['botName'] %></a></td>
             <td><%= byGoodArr[i]['goodCount'] %></td>
             <td><%= byGoodArr[i]['badCount'] %></td>
           </tr>
@@ -42,7 +42,7 @@
         </tr>
         <% for(var i = 0; i < byBadArr.length; i++) { %>
           <tr>
-            <td><%= byBadArr[i]['botName'] %></td>
+            <td><a href='https://www.reddit.com/user/<%= byBadArr[i]['botName'] %>'><%= byBadArr[i]['botName'] %></a></td>
             <td><%= byBadArr[i]['badCount'] %></td>
             <td><%= byBadArr[i]['goodCount'] %></td>
           </tr>
