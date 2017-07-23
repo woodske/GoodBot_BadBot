@@ -26,9 +26,9 @@ const con = mysql.createConnection({
 /**
  * Every 2.15 seconds, call scrape() to search Reddit for new comments
  * */
-setInterval(function() {
-  script.scrape();
-}, 2150);
+// setInterval(function() {
+//   script.scrape();
+// }, 2150);
 
 /**
  * Homepage. Display the current count of vote and best bot rank.
@@ -147,7 +147,7 @@ app.get('/all_filter', function(req, res) {
     /**
      * Query for all bots and their votes with good bot votes greater than 0
      * */
-    var sql = "SELECT botName, goodCount, badCount FROM bot WHERE goodCount > 0 ORDER BY goodCount DESC;";
+    var sql = "SELECT botName, goodCount, badCount FROM bot WHERE goodCount > 0 ORDER BY goodCount DESC, botName;";
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
@@ -158,7 +158,7 @@ app.get('/all_filter', function(req, res) {
     /**
      * Query for all bots and their votes with bad bot votes greater than 0
      * */
-    var sql = "SELECT botName, goodCount, badCount FROM bot WHERE badCount > 0 ORDER BY badCount DESC;";
+    var sql = "SELECT botName, goodCount, badCount FROM bot WHERE badCount > 0 ORDER BY badCount DESC, botName;";
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
@@ -174,7 +174,7 @@ app.post('/voter', function(req, res) {
      * */
     var sql = "SELECT botName FROM bot INNER JOIN bot_voter ON bot.bot_id = bot_voter.bot_id " +
         "INNER JOIN voter ON bot_voter.voter_id = voter.voter_id " +
-        "WHERE voter.voterName = '" + req.body.voter + "';";
+        "WHERE voter.voterName = '" + req.body.voter + "' ORDER BY botName;";
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
