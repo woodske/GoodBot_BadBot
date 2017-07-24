@@ -122,11 +122,11 @@ function _voterBotMatch (bName, vName, vote, voter_id) {
             /**
              * Delay one second then reply to voter with a link to the results page.
              * */
-            setTimeout(function () {
-                console.log("Replying to " + vName);
-                r.getSubmission(voter_id).reply("Thank you " + _formatUName(vName) + " for voting on " + _formatUName(bName) + ".  \n\n" +
-                "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
-            }, 1000);
+            // setTimeout(function () {
+            //     console.log("Replying to " + vName);
+            //     r.getSubmission(voter_id).reply("Thank you " + _formatUName(vName) + " for voting on " + _formatUName(bName) + ".  \n\n" +
+            //     "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ").");
+            // }, 1000);
         } else {
             console.log(vName + " has already voted for " + bName);
         }
