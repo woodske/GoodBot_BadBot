@@ -12,6 +12,8 @@ const r = new snoowrap({
     password        :       process.env.SNOO_PASSWORD
 });
 
+r.config({requestDelay: 1000, warnings: false});
+
 module.exports = {
 
     /**
@@ -65,23 +67,21 @@ function _storeVote(commentObj, result) {
     if (commentObj.parent_id.substring(0,2) == "t1") {
         var voterName = commentObj.author.name;
         console.log("The voter is " + voterName);
-        /**
-         * Dealy one second, then find the username of the parent comment. This is the bot's name.
-         * */
-        setTimeout(function () {
-            r.getComment(commentObj.parent_id).fetch().then(function (obj) {
-                console.log("The bot is " + obj.author.name);
-                /**
-                 * Check if the voter and bot name are the same. If not then
-                 * send bot name, voter name, vote result, and voter ID to addToDb found in
-                 * the db.js file. This handles the database interaction and commenting.
-                 * */
-                if (obj.author.name != voterName) {
-                    db.addToDb(obj.author.name, voterName, result, commentObj.name);
-                }
-            });
-        }, 1000);
         
+        /**
+         * Find the username of the parent comment. This is the bot's name.
+         * */
+        r.getComment(commentObj.parent_id).fetch().then(function (obj) {
+            console.log("The bot is " + obj.author.name);
+            /**
+             * Check if the voter and bot name are the same. If not then
+             * send bot name, voter name, vote result, and voter ID to addToDb found in
+             * the db.js file. This handles the database interaction and commenting.
+             * */
+            if (obj.author.name != voterName) {
+                db.addToDb(obj.author.name, voterName, result, commentObj.name);
+            }
+        });
     } else {
         console.log(voterName + " did not respond to a comment");
     }

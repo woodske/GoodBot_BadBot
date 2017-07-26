@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const snoowrap = require('snoowrap');
+var stringSimilarity = require('string-similarity');
 
 /**
  * Connect to Database. Hosted at AWS
@@ -22,32 +23,80 @@ const r = new snoowrap({
     password        :       process.env.SNOO_PASSWORD
 });
 
+r.config({requestDelay: 1000, warnings: false});
+
 module.exports = {
     /**
-    * @summary Called from app.js to store a hit into the database
+    * @summary Called from app.js to store a hit into the database. Check if the bot
+    *          exists in the database. Generate a score if not, otherwise tally the vote
     * @param {string} the bot's name
     * @param {string} the voter's name
     * @param {string} the vote (good or bad)
+    * @param {string} the voter's ID
     * @returns No return value
     * */
     addToDb: function addToDb(bName, vName, vote, voter_id) {
-        /**
-         * Add bot to database
-         * */
-        _addBot(bName);
-        
-        /**
-         * Add voter to database
-         * */
-        _addVoter(vName);
-        
-        /**
-         * Query the bot_voter table to see if the voter has voted for this bot before.
-         * If there is no match, create a match and tally the vote.
-         * */
-       _voterBotMatch(bName, vName, vote, voter_id);
+            
+        var sql = "SELECT botName FROM bot WHERE botName = '" + bName + "';";
+    
+        con.query(sql, function(err, result) {
+            if (err) {
+                throw (err);
+            }
+            /**
+             * Bot is not in database if result is empty
+             * */
+            if (Object.keys(result).length == 0) {
+                _botScore(bName, vName, vote, voter_id);
+            } else {
+                console.log(bName + " is already in the database");
+                _addVoter(vName);
+                _voterBotMatch(bName, vName, vote, voter_id);
+            }
+        });
     }
 };
+
+function _botScore (bName, vName, vote, voter_id) {
+    
+    var counter = 30;
+    var total = 0;
+    var botScore = 0;
+    
+    r.getUser(bName).getComments({limit: counter}).then(function(listing) {
+                
+        /**
+        * If the bot has less than (counter) comments, it is too new and defaults to 0.
+        * */
+        if (listing.length < counter) {
+            console.log(bName + " has too few comments");
+        } else {
+            var dataPoints = 0;
+            
+            listing.forEach(function(value, listIndex) {
+                for(var i = listIndex; i < listing.length - 1; i++) {
+                    dataPoints++;
+                    total += stringSimilarity.compareTwoStrings(listing[listIndex].body, listing[i+1].body);
+                }
+            });
+            
+            botScore = (total/dataPoints).toFixed(2);
+            console.log(bName + ": " + botScore);
+        }
+        /**
+         * A value of 0.3 or higher is a good indicator this is actually a bot
+         * */
+        if (botScore >= 0.3) {
+            console.log(bName + " is a bot: " + botScore);
+            _addBot(bName);
+            _addVoter(vName);
+            _voterBotMatch(bName, vName, vote, voter_id);
+        } else {
+            console.log(bName + " is likely not a bot: " + botScore);
+        }
+    });
+}
+
 
 /**
 * @summary Inserts the bot's name into the bot table
@@ -61,7 +110,7 @@ function _addBot (bName) {
             if (err.code == "ER_DUP_ENTRY") {
                 console.log(bName + " is already in the database");
             } else { 
-               throw(err);
+              throw(err);
             }
         } else {
             console.log(bName + " was inserted into the bot table");
@@ -70,20 +119,35 @@ function _addBot (bName) {
 }
 
 /**
-* @summary Inserts the voter's name into the voter table
+* @summary Inserts the voter's name into the voter table if it does not exist
 * @param {string} the voter's name
 * @returns No return value
 * */
 function _addVoter (vName) {
-    var sql = "INSERT INTO voter (voterName) VALUES ('" + vName + "')";
+    
+    var sql = "SELECT voterName FROM voter WHERE voterName = '" + vName + "';";
+    
     con.query(sql, function(err, result) {
         if (err) {
-            if (err.code == "ER_DUP_ENTRY")
-                console.log(vName + " is already in the database");
-            else
-                throw (err);
+            throw (err);
+        }
+        /**
+         * Bot is not in database if result is empty
+         * */
+        if (Object.keys(result).length == 0) {
+            var sql = "INSERT INTO voter (voterName) VALUES ('" + vName + "')";
+            con.query(sql, function(err, result) {
+                if (err) {
+                    if (err.code == "ER_DUP_ENTRY")
+                        console.log(vName + " is already in the database");
+                    else
+                        throw (err);
+                } else {
+                    console.log(vName + " was inserted into the voter table");
+                }
+            });
         } else {
-            console.log(vName + " was inserted into the voter table");
+            console.log(vName + " is already in the database");
         }
     });
 }
