@@ -1,5 +1,14 @@
-h1, h2 {
+h1, h2, h3 {
     text-align: center;
+}
+
+#hgb {
+    text-align: right;
+    color: green;
+}
+
+#hbb {
+    color: red;
 }
 
 .info_div {
