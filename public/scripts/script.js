@@ -72,14 +72,17 @@ function _storeVote(commentObj, result) {
          * Find the username of the parent comment. This is the bot's name.
          * */
         r.getComment(commentObj.parent_id).fetch().then(function (obj) {
-            console.log("The bot is " + obj.author.name);
+            var botName = obj.author.name;
+            var voterID = commentObj.name;
+            var linkID = obj.link_id;
+            console.log("The bot is " + botName);
             /**
              * Check if the voter and bot name are the same. If not then
              * send bot name, voter name, vote result, and voter ID to addToDb found in
              * the db.js file. This handles the database interaction and commenting.
              * */
-            if (obj.author.name != voterName) {
-                db.addToDb(obj.author.name, voterName, result, commentObj.name);
+            if (botName != voterName) {
+                db.addToDb(botName, voterName, result, voterID, linkID);
             }
         });
     } else {
