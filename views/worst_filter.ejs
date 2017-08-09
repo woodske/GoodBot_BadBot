@@ -17,9 +17,16 @@
   <h1>Welcome to GoodBot_BadBot's Rankings</h1>
   <div class="info_div">There have been <strong><%= total %></strong> votes cast:
   <strong><%= goodCount %></strong> good bot votes and <strong><%= badCount %></strong> bad bot votes.</div>
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6"  id="hgb">
+      Honorary Good Bot: <a href="https://www.reddit.com/u/SirBelvedere">SirBelvedere</a>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6"  id ="hbb">
+      Honorary Bad Bot: <a href="https://www.reddit.com/u/lukecis">lukecis</a>
+    </div>
+  </div>
 </div>
 
-<br>
 <br>
 
 <!--Homepage content to go here-->
@@ -33,7 +40,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12">
       <h2>Worst Bot Standings</h2>
       <div class="info_div">
-        These are the 6 worst bots with at least ten votes sorted by the inverse of the 
+        These are the 10 worst bots with at least ten votes sorted by the one minus the 
         <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">
         Lower bound of Wilson score confidence interval for a Bernoulli parameter</a>.
       </div>
@@ -45,7 +52,6 @@
   </div>
 </div>
 
-<br>
 <br>
 
 </body>
@@ -70,25 +76,33 @@ var ctx = document.getElementById("worstChart");
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ["<%= worstBotName[0] %>", "<%= worstBotName[1] %>", "<%= worstBotName[2] %>", "<%= worstBotName[3] %>", "<%= worstBotName[4] %>", "<%= worstBotName[5] %>"],
+        labels: ["<%= worstBotName[0] %>", "<%= worstBotName[1] %>", "<%= worstBotName[2] %>", "<%= worstBotName[3] %>", "<%= worstBotName[4] %>", "<%= worstBotName[5] %>", "<%= worstBotName[6] %>", "<%= worstBotName[7] %>", "<%= worstBotName[8] %>", "<%= worstBotName[9] %>"],
         datasets: [{
-            label: 'Inverse of the Lower Bound of Wilson Score Confidence Interval',
-            data: [<%= worstBotScore[0] %>, <%= worstBotScore[1] %>, <%= worstBotScore[2] %>, <%= worstBotScore[3] %>, <%= worstBotScore[4] %>, <%= worstBotScore[5] %>],
+            label: 'One minus the Lower Bound of Wilson Score Confidence Interval',
+            data: [<%= worstBotScore[0] %>, <%= worstBotScore[1] %>, <%= worstBotScore[2] %>, <%= worstBotScore[3] %>, <%= worstBotScore[4] %>, <%= worstBotScore[5] %>, <%= worstBotScore[6] %>, <%= worstBotScore[7] %>, <%= worstBotScore[8] %>, <%= worstBotScore[9] %>],
             backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
+                'rgba(175, 0, 14, 0.7)',
+                'rgba(209, 20, 20, 0.7)',
+                'rgba(214, 100, 19, 0.7)',
+                'rgba(214, 152, 18, 0.7)',
+                'rgba(214, 191, 18, 0.7)',
+                'rgba(207, 214, 18, 0.7)',
+                'rgba(174, 214, 18, 0.7)',
+                'rgba(145, 214, 18, 0.7)',
+                'rgba(106, 214, 18, 0.7)',
+                'rgba(18, 214, 37, 0.7)'
             ],
             borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
+                'rgba(175, 0, 14, 1)',
+                'rgba(209, 20, 20, 1)',
+                'rgba(214, 100, 19, 1)',
+                'rgba(214, 152, 18, 1)',
+                'rgba(214, 191, 18, 1)',
+                'rgba(207, 214, 18, 1)',
+                'rgba(174, 214, 18, 1)',
+                'rgba(145, 214, 18, 1)',
+                'rgba(106, 214, 18, 1)',
+                'rgba(18, 214, 37, 1)'
             ],
             borderWidth: 1
         }]
@@ -97,7 +111,7 @@ var myChart = new Chart(ctx, {
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero:true
+                    beginAtZero:false
                 }
             }]
         }
