@@ -55,13 +55,13 @@ app.get('/', function (req, res) {
     });
     
     /**
-     * Query for top 6 best bots
+     * Query for top 10 best bots
      * */
     var sql = "SELECT botName, ((goodCount + 1.9208) / (goodCount + badCount) - " +
                 "1.96 * SQRT((goodCount * badCount) / (goodCount + badCount) + 0.9604) / " +
                 "(goodCount + badCount)) / (1 + 3.8416 / (goodCount + badCount)) " +
                 "AS ci_lower_bound FROM bot WHERE goodCount + badCount > 0 " +
-                "ORDER BY ci_lower_bound DESC limit 6;";
+                "ORDER BY ci_lower_bound DESC limit 10;";
 
     con.query(sql, function(err, result) {
         if (err) 
@@ -110,13 +110,13 @@ app.get('/worst_filter', function (req, res) {
     });
     
     /**
-     * Query for top 6 worst bots
+     * Query for top 10 worst bots
      * */
-    var sql = "SELECT botName, 1/(((goodCount + 1.9208) / (goodCount + badCount) - " +
+    var sql = "SELECT botName, 1 - (((goodCount + 1.9208) / (goodCount + badCount) - " +
                 "1.96 * SQRT((goodCount * badCount) / (goodCount + badCount) + 0.9604) / " +
                 "(goodCount + badCount)) / (1 + 3.8416 / (goodCount + badCount))) " +
                 "AS ci_lower_bound FROM bot WHERE goodCount + badCount > 9 " +
-                "ORDER BY ci_lower_bound DESC limit 6;";
+                "ORDER BY ci_lower_bound DESC limit 10;";
 
     con.query(sql, function(err, result) {
         if (err) 
