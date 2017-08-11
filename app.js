@@ -142,28 +142,23 @@ app.get('/worst_filter', function (req, res) {
 
 app.get('/all_filter', function(req, res) {
     
-    var byGoodArr = [];
+    var byBestArr = [];
     
     /**
-     * Query for all bots and their votes with good bot votes greater than 0
+     * Query for all bots and scores
      * */
-    var sql = "SELECT botName, goodCount, badCount FROM bot WHERE goodCount > 0 ORDER BY goodCount DESC, botName;";
+    var sql = "SELECT botName, goodCount, badCount, ROUND(((goodCount + 1.9208) / (goodCount + badCount) - " +
+                "1.96 * SQRT((goodCount * badCount) / (goodCount + badCount) + 0.9604) / " +
+                "(goodCount + badCount)) / (1 + 3.8416 / (goodCount + badCount)),4) " +
+                "AS ci_lower_bound FROM bot WHERE goodCount + badCount > 0 " +
+                "ORDER BY ci_lower_bound DESC;";
+    
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
         }
-        byGoodArr = result;
-    });
-    
-    /**
-     * Query for all bots and their votes with bad bot votes greater than 0
-     * */
-    var sql = "SELECT botName, goodCount, badCount FROM bot WHERE badCount > 0 ORDER BY badCount DESC, botName;";
-    con.query(sql, function(err, result) {
-        if (err) {
-            throw (err);
-        }
-        res.render('all_filter.ejs', {byGoodArr: byGoodArr, byBadArr: result});
+        byBestArr = result;
+        res.render('all_filter.ejs', {byBestArr: byBestArr});
     });
 });
 

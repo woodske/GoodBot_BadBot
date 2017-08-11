@@ -2,6 +2,10 @@ h1, h2, h3 {
     text-align: center;
 }
 
+.allFilter {
+    text-align: center;
+}
+
 #hgb {
     text-align: right;
     color: green;

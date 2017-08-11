@@ -14,37 +14,23 @@
 
 <div class="container">
   <div class="row>">
-    <div class="col-lg-6">
-      <h2>All bots with good bot votes</h2>
-      <table class="table table-condensed">
+    <div class="col-lg-8 col-lg-offset-2">
+      <h2>Bot Rankings</h2>
+      <table class="table table-condensed" id="allFilterTable">
         <tr>
+          <th>Rank</th>
           <th>Bot Name</th>
-          <th>Good Bot Count</th>
-          <th>Bad Bot Count</th>
+          <th>Score</th>
+          <th class="allFilter">Good Bot Votes</th>
+          <th class="allFilter">Bad Bot Votes</th>
         </tr>
-        <% for(var i = 0; i < byGoodArr.length; i++) { %>
+        <% for(var i = 0; i < byBestArr.length; i++) { %>
           <tr>
-            <td><a href='https://www.reddit.com/user/<%= byGoodArr[i]['botName'] %>'><%= byGoodArr[i]['botName'] %></a></td>
-            <td><%= byGoodArr[i]['goodCount'] %></td>
-            <td><%= byGoodArr[i]['badCount'] %></td>
-          </tr>
-        <% } %>
-          </tr>
-      </table>
-    </div>
-    <div class="col-lg-6">
-      <h2>All bots with bad bot votes</h2>
-      <table class="table table-condensed">
-        <tr>
-          <th>Bot Name</th>
-          <th>Bad Bot Count</th>
-          <th>Good Bot Count</th>
-        </tr>
-        <% for(var i = 0; i < byBadArr.length; i++) { %>
-          <tr>
-            <td><a href='https://www.reddit.com/user/<%= byBadArr[i]['botName'] %>'><%= byBadArr[i]['botName'] %></a></td>
-            <td><%= byBadArr[i]['badCount'] %></td>
-            <td><%= byBadArr[i]['goodCount'] %></td>
+            <td><%= i+1 %></td>
+            <td><a href='https://www.reddit.com/user/<%= byBestArr[i]['botName'] %>'><%= byBestArr[i]['botName'] %></a></td>
+            <td><%= byBestArr[i]['ci_lower_bound'] %></td>
+            <td class="allFilter"><%= byBestArr[i]['goodCount'] %></td>
+            <td class="allFilter"><%= byBestArr[i]['badCount'] %></td>
           </tr>
         <% } %>
           </tr>
