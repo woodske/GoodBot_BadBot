@@ -253,8 +253,9 @@ function _addVoteToBot(bName, vote) {
 function _replyToComment(vName, bName, voter_id, link_id) {
     var message = "Thank you " + _formatUName(vName) + " for voting on " + _formatUName(bName) + ".  \n\n" +
         "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ")." +
-        "\n\n\n" +
-        "^Even ^if ^I ^don't ^reply ^to ^your ^comment ^, ^I'm ^still ^listening ^for ^votes. ^Check ^the ^webpage ^to ^see ^if ^your ^vote ^registered!";
+        "\n ***" +
+        "^^Even ^^if ^^I ^^don't ^^reply ^^to ^^your ^^comment, ^^I'm ^^still ^^listening ^^for ^^votes. " +
+        "^^Check ^^the ^^webpage ^^to ^^see ^^if ^^your ^^vote ^^registered!";
     
     var sql = "SELECT link_id FROM link WHERE link_id = '" + link_id + "';";
     
