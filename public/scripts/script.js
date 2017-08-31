@@ -40,11 +40,11 @@ module.exports = {
                 var comment = key.body.substring(0,8).toLowerCase();
                 
                 
-                if(comment == "good bot") {
+                if(comment.includes("good bot")) {
                     console.log("Found comment '" + key.body + "'");
                     _storeVote(key, "good");
                 }
-                else if(comment == "bad bot") {
+                else if(comment.includes("bad bot")) {
                     console.log("Found comment '" + key.body + "'");
                     _storeVote(key, "bad");
                 }
