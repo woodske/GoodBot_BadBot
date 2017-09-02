@@ -112,11 +112,11 @@ app.get('/worst_filter', function (req, res) {
     /**
      * Query for top 10 worst bots
      * */
-    var sql = "SELECT botName, 1 - (((goodCount + 1.9208) / (goodCount + badCount) - " +
-                "1.96 * SQRT((goodCount * badCount) / (goodCount + badCount) + 0.9604) / " +
-                "(goodCount + badCount)) / (1 + 3.8416 / (goodCount + badCount))) " +
-                "AS ci_lower_bound FROM bot WHERE goodCount + badCount > 9 " +
-                "ORDER BY ci_lower_bound DESC limit 10;";
+    var sql = "SELECT botName, ((badCount + 1.9208) / (badCount + goodCount) - " +
+                "1.96 * SQRT((badCount * goodCount) / (badCount + goodCount) + 0.9604) / " +
+                "(badCount + goodCount)) / (1 + 3.8416 / (badCount + goodCount)) " +
+                "AS one_minus_ci_upper_bound FROM bot WHERE badCount + goodCount > 0 " +
+                "ORDER BY one_minus_ci_upper_bound DESC limit 10;";
 
     con.query(sql, function(err, result) {
         if (err) 
@@ -124,7 +124,7 @@ app.get('/worst_filter', function (req, res) {
             
         result.forEach(function(key) {
             worstBotNameArr.push(key.botName);
-            worstBotScoreArr.push(key.ci_lower_bound);
+            worstBotScoreArr.push(key.one_minus_ci_upper_bound);
         });
         
         res.render('worst_filter.ejs', 

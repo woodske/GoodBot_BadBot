@@ -40,9 +40,9 @@
     <div class="col-lg-12 col-md-12 col-sm-12">
       <h2>Worst Bot Standings</h2>
       <div class="info_div">
-        These are the 10 worst bots with at least ten votes sorted by one minus the 
+        These are the 10 worst bots sorted by one minus the 
         <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">
-        Lower bound of Wilson score confidence interval for a Bernoulli parameter</a>.
+        Upper bound of Wilson score confidence interval for a Bernoulli parameter</a>.
       </div>
     </div>
   <div class="row">
@@ -78,7 +78,7 @@ var myChart = new Chart(ctx, {
     data: {
         labels: ["<%= worstBotName[0] %>", "<%= worstBotName[1] %>", "<%= worstBotName[2] %>", "<%= worstBotName[3] %>", "<%= worstBotName[4] %>", "<%= worstBotName[5] %>", "<%= worstBotName[6] %>", "<%= worstBotName[7] %>", "<%= worstBotName[8] %>", "<%= worstBotName[9] %>"],
         datasets: [{
-            label: 'One minus the Lower Bound of Wilson Score Confidence Interval',
+            label: 'One minus the Upper Bound of Wilson Score Confidence Interval',
             data: [<%= worstBotScore[0] %>, <%= worstBotScore[1] %>, <%= worstBotScore[2] %>, <%= worstBotScore[3] %>, <%= worstBotScore[4] %>, <%= worstBotScore[5] %>, <%= worstBotScore[6] %>, <%= worstBotScore[7] %>, <%= worstBotScore[8] %>, <%= worstBotScore[9] %>],
             backgroundColor: [
                 'rgba(175, 0, 14, 0.7)',
