@@ -185,12 +185,9 @@ function _voterBotMatch (bName, vName, vote, voter_id, link_id) {
          * an empty object will return if there is no match between the voter and bot
          * */
         if (Object.keys(result).length == 0) {
-            console.log(vName + " has not yet voted for " + bName);
-            _createMatch(bName, vName, vote);
-            _addVoteToBot(bName, vote);
             _replyToComment(vName, bName, voter_id, link_id);
         } else {
-            console.log(vName + " has already voted for " + bName);
+            console.log(vName + " has already spammed reddit for " + bName);
         }
     });
 }
@@ -251,11 +248,11 @@ function _addVoteToBot(bName, vote) {
 }
 
 function _replyToComment(vName, bName, voter_id, link_id) {
-    var message = "Thank you " + _formatUName(vName) + " for voting on " + _formatUName(bName) + ".  \n\n" +
-        "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ")." +
+    var message = "Hey " + _formatUName(vName) + " stop spamming reddit with useless bot votes.  \n\n" +
+        "This bot wants to create hundreds of useless, spammy \"Good Bot\" and \"Bad Bot\" comments after literally every bot comment on this website.   \n\n Your vote has not been recorded." +
         "  \n\n ***  \n\n" +
-        "^^Even ^^if ^^I ^^don't ^^reply ^^to ^^your ^^comment, ^^I'm ^^still ^^listening ^^for ^^votes. " +
-        "^^Check ^^the ^^webpage ^^to ^^see ^^if ^^your ^^vote ^^registered!";
+        "^^Even ^^if ^^I ^^don't ^^reply ^^to ^^your ^^comment, ^^I'm ^^still ^^encouraging ^^sitewide ^^spam. " +
+        "^^Check ^^the ^^webpage ^^to ^^see ^^if ^^your ^^spam ^^registered!";
     
     var sql = "SELECT link_id FROM link WHERE link_id = '" + link_id + "';";
     
