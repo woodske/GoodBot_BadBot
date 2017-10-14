@@ -38,9 +38,9 @@ module.exports = {
     * */
     addToDb: function addToDb(bName, vName, vote, voter_id, link_id) {
             
-        var sql = "SELECT botName FROM bot WHERE botName = '" + bName + "';";
+        var sql = "SELECT botName FROM bot WHERE botName = ?;";
     
-        con.query(sql, function(err, result) {
+        con.query(sql, [bName], function(err, result) {
             if (err) {
                 throw (err);
             }
@@ -106,9 +106,9 @@ function _botScore (bName, vName, vote, voter_id, link_id) {
 * */
 function _addBot (bName) {
     
-    var sql = "INSERT INTO bot (botName, goodCount, badCount) VALUES ('" + bName + "', 0, 0)";
+    var sql = "INSERT INTO bot (botName, goodCount, badCount) VALUES (?, 0, 0)";
     
-    con.query(sql, function(err, result) {
+    con.query(sql, [bName], function(err, result) {
         if (err) {
             if (err.code == "ER_DUP_ENTRY") {
                 console.log(bName + " is already in the database");
@@ -128,9 +128,9 @@ function _addBot (bName) {
 * */
 function _addVoter (vName) {
     
-    var sql = "SELECT voterName FROM voter WHERE voterName = '" + vName + "';";
+    var sql = "SELECT voterName FROM voter WHERE voterName = ?;";
     
-    con.query(sql, function(err, result) {
+    con.query(sql, [vName], function(err, result) {
         if (err) {
             throw (err);
         }
@@ -138,8 +138,8 @@ function _addVoter (vName) {
          * Bot is not in database if result is empty
          * */
         if (Object.keys(result).length == 0) {
-            var sql = "INSERT INTO voter (voterName) VALUES ('" + vName + "')";
-            con.query(sql, function(err, result) {
+            var sql = "INSERT INTO voter (voterName) VALUES (?)";
+            con.query(sql, [vName], function(err, result) {
                 if (err) {
                     if (err.code == "ER_DUP_ENTRY")
                         console.log(vName + " is already in the database");
@@ -175,9 +175,9 @@ function _formatUName (username) {
 function _voterBotMatch (bName, vName, vote, voter_id, link_id) {
     
     var sql = "SELECT * FROM bot INNER JOIN bot_voter ON bot.bot_id = bot_voter.bot_id INNER JOIN voter ON bot_voter.voter_id = voter.voter_id " +
-        "WHERE bot.botName = '" + bName + "' AND voter.voterName = '" + vName + "';";
+        "WHERE bot.botName = ? AND voter.voterName = ?;";
     
-    con.query(sql, function(err, result) {
+    con.query(sql, [bName, vName], function(err, result) {
         if (err) {
             throw (err);
         }
@@ -206,10 +206,10 @@ function _createMatch (bName, vName, vote) {
      * Insert the bot ID, voter ID, vote, and time/date into the bot_voter table to prevent duplicate votes
      * */
     var date = new Date();
-    var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time) VALUES ((SELECT bot_id FROM bot WHERE botName = '" + bName + "'), " +
-        "(SELECT voter_id FROM voter WHERE voterName = '" + vName + "'), '" + vote + "', " + JSON.stringify(date) + ");";
+    var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time) VALUES ((SELECT bot_id FROM bot WHERE botName = ?), " +
+        "(SELECT voter_id FROM voter WHERE voterName = ?), ?, ?);";
     
-    con.query(sql, function(err, result) {
+    con.query(sql, [bName, vName, vote, JSON.stringify(date)], function(err, result) {
         if (err) 
             throw (err);
         else
@@ -229,9 +229,9 @@ function _addVoteToBot(bName, vote) {
      * */
     if (vote == "good") {
         
-        var sql = "UPDATE bot SET goodCount = goodCount + 1 WHERE botName = '" + bName + "';";
+        var sql = "UPDATE bot SET goodCount = goodCount + 1 WHERE botName = ?;";
         
-        con.query(sql, function(err, result) {
+        con.query(sql, [bName], function(err, result) {
             if (err) 
                 throw (err);
             else
@@ -239,9 +239,9 @@ function _addVoteToBot(bName, vote) {
         });
     } else {
         
-        var sql = "UPDATE bot SET badCount = badCount + 1 WHERE botName = '" + bName + "';";
+        var sql = "UPDATE bot SET badCount = badCount + 1 WHERE botName = ?;";
         
-        con.query(sql, function(err, result) {
+        con.query(sql, [bName], function(err, result) {
             if (err) 
                 throw (err);
             else
@@ -257,9 +257,9 @@ function _replyToComment(vName, bName, voter_id, link_id) {
         "^^Even ^^if ^^I ^^don't ^^reply ^^to ^^your ^^comment, ^^I'm ^^still ^^listening ^^for ^^votes. " +
         "^^Check ^^the ^^webpage ^^to ^^see ^^if ^^your ^^vote ^^registered!";
     
-    var sql = "SELECT link_id FROM link WHERE link_id = '" + link_id + "';";
+    var sql = "SELECT link_id FROM link WHERE link_id = ?;";
     
-    con.query(sql, function(err, result) {
+    con.query(sql, [link_id], function(err, result) {
         if (err) {
             throw (err);
         }
@@ -276,9 +276,9 @@ function _replyToComment(vName, bName, voter_id, link_id) {
             /**
              * Insert the link_id into the link table
              * */
-            var sql = "INSERT INTO link (link_id) VALUES ('" + link_id + "')";
+            var sql = "INSERT INTO link (link_id) VALUES (?)";
             
-            con.query(sql, function(err, result) {
+            con.query(sql, [link_id], function(err, result) {
                 if (err) {
                     if (err.code == "ER_DUP_ENTRY") {
                         console.log(link_id + " is already in the database");
