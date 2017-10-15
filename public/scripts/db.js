@@ -37,10 +37,10 @@ module.exports = {
     * @returns No return value
     * */
     addToDb: function addToDb(bName, vName, vote, voter_id, link_id) {
-            
-        var sql = "SELECT botName FROM bot WHERE botName = '" + bName + "';";
-    
-        con.query(sql, function(err, result) {
+
+        var sql = "SELECT botName FROM bot WHERE botName = ?';
+
+        con.query(sql, [bName] function(err, result) {
             if (err) {
                 throw (err);
             }
@@ -59,13 +59,13 @@ module.exports = {
 };
 
 function _botScore (bName, vName, vote, voter_id, link_id) {
-    
+
     var counter = 30;
     var total = 0;
     var botScore = 0;
-    
+
     r.getUser(bName).getComments({limit: counter}).then(function(listing) {
-                
+
         /**
         * If the bot has less than (counter) comments, it is too new and defaults to 0.
         * */
@@ -73,14 +73,14 @@ function _botScore (bName, vName, vote, voter_id, link_id) {
             console.log(bName + " has too few comments");
         } else {
             var dataPoints = 0;
-            
+
             listing.forEach(function(value, listIndex) {
                 for(var i = listIndex; i < listing.length - 1; i++) {
                     dataPoints++;
                     total += stringSimilarity.compareTwoStrings(listing[listIndex].body, listing[i+1].body);
                 }
             });
-            
+
             botScore = (total/dataPoints).toFixed(2);
             console.log(bName + ": " + botScore);
         }
@@ -105,14 +105,14 @@ function _botScore (bName, vName, vote, voter_id, link_id) {
 * @returns No return value
 * */
 function _addBot (bName) {
-    
+
     var sql = "INSERT INTO bot (botName, goodCount, badCount) VALUES ('" + bName + "', 0, 0)";
-    
+
     con.query(sql, function(err, result) {
         if (err) {
             if (err.code == "ER_DUP_ENTRY") {
                 console.log(bName + " is already in the database");
-            } else { 
+            } else {
               throw(err);
             }
         } else {
@@ -127,9 +127,9 @@ function _addBot (bName) {
 * @returns No return value
 * */
 function _addVoter (vName) {
-    
+
     var sql = "SELECT voterName FROM voter WHERE voterName = '" + vName + "';";
-    
+
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
@@ -173,10 +173,10 @@ function _formatUName (username) {
 * @returns no return value
 * */
 function _voterBotMatch (bName, vName, vote, voter_id, link_id) {
-    
+
     var sql = "SELECT * FROM bot INNER JOIN bot_voter ON bot.bot_id = bot_voter.bot_id INNER JOIN voter ON bot_voter.voter_id = voter.voter_id " +
         "WHERE bot.botName = '" + bName + "' AND voter.voterName = '" + vName + "';";
-    
+
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
@@ -208,9 +208,9 @@ function _createMatch (bName, vName, vote) {
     var date = new Date();
     var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time) VALUES ((SELECT bot_id FROM bot WHERE botName = '" + bName + "'), " +
         "(SELECT voter_id FROM voter WHERE voterName = '" + vName + "'), '" + vote + "', " + JSON.stringify(date) + ");";
-    
+
     con.query(sql, function(err, result) {
-        if (err) 
+        if (err)
             throw (err);
         else
             console.log("Stored that " + vName + " has voted for " + bName);
@@ -228,21 +228,21 @@ function _addVoteToBot(bName, vote) {
      * Increment the goodCount or badCount depending on the voter comment
      * */
     if (vote == "good") {
-        
+
         var sql = "UPDATE bot SET goodCount = goodCount + 1 WHERE botName = '" + bName + "';";
-        
+
         con.query(sql, function(err, result) {
-            if (err) 
+            if (err)
                 throw (err);
             else
                 console.log("Added a good bot vote to " + bName);
         });
     } else {
-        
+
         var sql = "UPDATE bot SET badCount = badCount + 1 WHERE botName = '" + bName + "';";
-        
+
         con.query(sql, function(err, result) {
-            if (err) 
+            if (err)
                 throw (err);
             else
                 console.log("Added a bad bot vote to " + bName);
@@ -256,9 +256,9 @@ function _replyToComment(vName, bName, voter_id, link_id) {
         "  \n\n ***  \n\n" +
         "^^Even ^^if ^^I ^^don't ^^reply ^^to ^^your ^^comment, ^^I'm ^^still ^^listening ^^for ^^votes. " +
         "^^Check ^^the ^^webpage ^^to ^^see ^^if ^^your ^^vote ^^registered!";
-    
+
     var sql = "SELECT link_id FROM link WHERE link_id = '" + link_id + "';";
-    
+
     con.query(sql, function(err, result) {
         if (err) {
             throw (err);
@@ -272,17 +272,17 @@ function _replyToComment(vName, bName, voter_id, link_id) {
              * */
             console.log("Replying to " + vName);
             r.getSubmission(voter_id).reply(message);
-            
+
             /**
              * Insert the link_id into the link table
              * */
             var sql = "INSERT INTO link (link_id) VALUES ('" + link_id + "')";
-            
+
             con.query(sql, function(err, result) {
                 if (err) {
                     if (err.code == "ER_DUP_ENTRY") {
                         console.log(link_id + " is already in the database");
-                    } else { 
+                    } else {
                       throw(err);
                     }
                 } else {
