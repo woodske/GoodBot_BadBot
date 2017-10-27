@@ -1,10 +1,11 @@
-const mysql = require('mysql');
-const snoowrap = require('snoowrap');
-var stringSimilarity = require('string-similarity');
+// set up ======================================================================
+var mysql               = require('mysql'),
+    snoowrap            = require('snoowrap'),
+    stringSimilarity    = require('string-similarity');
 
-/**
- * Connect to Database. Hosted at AWS
- * */
+// configuration ===============================================================
+
+// DATABASE CONFIGURATION
 const con = mysql.createConnection({
     host        :       process.env.DB_HOST,
     user        :       process.env.DB_USER,
@@ -12,9 +13,7 @@ const con = mysql.createConnection({
     database    :       process.env.DB_DATABASE
 });
 
-/**
- * Connect to the Reddit API via snoowrap
- * */
+// REDDIT API CONFIGURATION
 const r = new snoowrap({
     userAgent       :       process.env.SNOO_USERAGENT,
     clientId        :       process.env.SNOO_CLIENTID,
@@ -24,6 +23,8 @@ const r = new snoowrap({
 });
 
 r.config({requestDelay: 1000, warnings: false});
+
+// export function =============================================================
 
 module.exports = {
     /**
@@ -58,6 +59,26 @@ module.exports = {
     }
 };
 
+// helper functions ============================================================
+
+/**
+* @summary Escapes underscores in usernames to prevent Reddit from italicising text
+* @param {string} the username
+* @return {string} the escaped username
+* */
+function _formatUName (username) {
+    return (username).replace(/_/g, "\\_");
+}
+
+/**
+* @summary Bot filtering score generator 
+* @param {string} the bot's name
+* @param {string} the voter's name
+* @param {string} the vote (good or bad)
+* @param {string} the voter's ID
+* @param {string} the thread's unique ID
+* @returns No return value
+* */
 function _botScore (bName, vName, vote, voter_id, link_id) {
     
     var counter = 30;
@@ -153,15 +174,6 @@ function _addVoter (vName) {
             console.log(vName + " is already in the database");
         }
     });
-}
-
-/**
-* @summary Escapes underscores in usernames to prevent Reddit from italicising text
-* @param {string} the username
-* @return {string} the escaped username
-* */
-function _formatUName (username) {
-    return (username).replace(/_/g, "\\_");
 }
 
 /**
