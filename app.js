@@ -29,21 +29,3 @@ app.listen(process.env.PORT, process.env.IP, function() {
 setInterval(function() {
   script.scrape();
 }, 2150);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
