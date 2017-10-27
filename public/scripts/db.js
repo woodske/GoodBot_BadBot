@@ -119,7 +119,6 @@ function _botScore (bName, vName, vote, voter_id, link_id) {
     });
 }
 
-
 /**
 * @summary Inserts the bot's name into the bot table
 * @param {string} the bot's name
@@ -262,7 +261,16 @@ function _addVoteToBot(bName, vote) {
     }
 }
 
+/**
+* @summary Reply to voter (once per thread) 
+* @param {string} the voter's name
+* @param {string} the bot's name
+* @param {string} the voter's ID
+* @param {string} the thread's unique ID
+* @returns No return value
+* */
 function _replyToComment(vName, bName, voter_id, link_id) {
+    
     var message = "Thank you " + _formatUName(vName) + " for voting on " + _formatUName(bName) + ".  \n\n" +
         "This bot wants to find the best and worst bots on Reddit. [You can view results here](" + process.env.RESULTS_LINK + ")." +
         "  \n\n ***  \n\n" +
