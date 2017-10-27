@@ -8,10 +8,8 @@
 
 <body>
   
-<!--Navigation bar to go here-->
-<div id="nav-placeholder">
-  
-</div>
+<!--Navigation -->
+<% include ./partials/navbar %>
 
 <div class="container">
   <div class="row>">
@@ -50,10 +48,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 <script>
-$.get("./html/nav.html", function(data){
-    $("#nav-placeholder").replaceWith(data);
-});
-
 $(document).ready( function () {
     $('#allFilterTable').DataTable();
 } );
