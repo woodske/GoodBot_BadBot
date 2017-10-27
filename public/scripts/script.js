@@ -1,9 +1,10 @@
-const snoowrap = require('snoowrap');
-const db = require('./db.js');
+// set up ======================================================================
+var snoowrap            = require('snoowrap'),
+    db                  = require('./db.js');
 
-/**
- * Connect to the Reddit API via snoowrap
- * */
+// configuration ===============================================================
+
+// REDDIT API CONFIGURATION
 const r = new snoowrap({
     userAgent       :       process.env.SNOO_USERAGENT,
     clientId        :       process.env.SNOO_CLIENTID,
@@ -13,6 +14,8 @@ const r = new snoowrap({
 });
 
 r.config({requestDelay: 1000, warnings: false});
+
+// export function =============================================================
 
 module.exports = {
 
@@ -52,6 +55,8 @@ module.exports = {
         });
     }
 };
+
+// helper function =============================================================
 
 /**
  * @summary Grabs the parent comment's name and sends relevant information
