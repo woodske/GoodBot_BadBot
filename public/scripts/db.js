@@ -199,7 +199,7 @@ function _voterBotMatch (bName, vName, vote, voter_id, link_id) {
             console.log(vName + " has not yet voted for " + bName);
             _createMatch(bName, vName, vote);
             _addVoteToBot(bName, vote);
-            //_replyToComment(vName, bName, voter_id, link_id);
+            _replyToComment(vName, bName, voter_id, link_id);
         } else {
             console.log(vName + " has already voted for " + bName);
         }
