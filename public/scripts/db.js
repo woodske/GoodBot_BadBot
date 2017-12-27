@@ -217,14 +217,22 @@ function _createMatch (bName, vName, vote) {
      * Insert the bot ID, voter ID, vote, and time/date into the bot_voter table to prevent duplicate votes
      * */
     var date = new Date();
-    var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time) VALUES ((SELECT bot_id FROM bot WHERE botName = ?), " +
-        "(SELECT voter_id FROM voter WHERE voterName = ?), ?, ?);";
+    var hour, day, month, year;
+
+    hour = date.getHours();
+    day = date.getDate();
+    month = date.getMonth();
+    year = date.getFullYear();
     
-    con.query(sql, [bName, vName, vote, JSON.stringify(date)], function(err, result) {
+    var sql = "INSERT INTO bot_voter (bot_id, voter_id, vote, time, vote_hour, vote_day, vote_month, vote_year) VALUES ((SELECT bot_id FROM bot WHERE botName = ?), " +
+        "(SELECT voter_id FROM voter WHERE voterName = ?), ?, ?, ?, ?, ?, ?);";
+    
+    con.query(sql, [bName, vName, vote, JSON.stringify(date), hour, day, month, year], function(err, result) {
         if (err) 
             throw (err);
         else
-            console.log("Stored that " + vName + " has voted for " + bName);
+            console.log("Stored that " + vName + " has voted for " + bName + " where:\nHour: " + hour + "\nDay: " + day +
+            "\nMonth: " + month + "\nYear: " + year);
     });
 }
 
